@@ -3,6 +3,7 @@
     "images": [
       "image1.jpg"
     ],
+    "community":"Dubai Creek Harbour",
     "title": "Luxury Apartments in Downtown",
     "rent": "Starting from AED 100,000 per year",
     "developer": {

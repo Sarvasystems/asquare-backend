@@ -11,6 +11,8 @@ const CommercialListingSchema = new Schema({
   },
   availableFrom: Date,
   location: String,
+  coummity: String,
+  soldType: String,
   description: String,
   amenities: [String],
   transaction: {

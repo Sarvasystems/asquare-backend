@@ -10,6 +10,7 @@ const OffPlanListingSchema = new Schema({
     logo: String
   },
   location: String,
+  coummity: String,
   information: {
     deliveryDate: Date,
     numberOfBuildings: Number,

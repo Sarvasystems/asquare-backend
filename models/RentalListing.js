@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const RentalListingSchema = new Schema({
-  images: [String],
+  displayImages: [String],
   title: String,
+  price: Number,
+  propertyType: String,
+  furnishing: String,
   tagline: String,
   developer: {
     title: String,
@@ -11,6 +14,10 @@ const RentalListingSchema = new Schema({
   },
   availableFrom: Date,
   location: String,
+  community: String,
+  baths: String,
+  beds: String,
+  soldType: String,
   description: String,
   amenities: [String],
   transaction: {
