@@ -9,6 +9,8 @@ const offPlanListingRoutes = require('./routes/offPlanListing.route');
 const rentalListingRoutes = require('./routes/rentalListing.route');
 const commercialListingRoutes = require('./routes/commercialListing.route');
 const userRoutes = require('./routes/user.route');
+const tourRequestRoutes = require('./routes/tourRequest.route');
+
 
 dotenv.config();
 
@@ -28,6 +30,7 @@ app.use('/api/offplanlistings', offPlanListingRoutes);
 app.use('/api/rentallistings', rentalListingRoutes);
 app.use('/api/commerciallistings', commercialListingRoutes);
 app.use('/api/users', userRoutes); 
+app.use('/api/tourrequests', tourRequestRoutes); 
 
 // Use the upload routes
 app.use('/api', uploadRoutes);
