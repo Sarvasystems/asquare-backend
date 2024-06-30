@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+const cors = require('cors');
 const uploadRoutes = require('./routes/upload.route');
 
 const offPlanListingRoutes = require('./routes/offPlanListing.route');
@@ -15,6 +16,9 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+
+// Enable CORS
+app.use(cors());
 
 // Static folder for serving uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

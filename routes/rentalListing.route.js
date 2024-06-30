@@ -4,7 +4,7 @@ const rentalListingController = require('../controllers/rentalListing.controller
 const authMiddleware = require('../middleware/authMiddleware');
 const upload = require('../config/uploadConfig');
 
-router.post('/', authMiddleware, rentalListingController.createRentalListing);
+router.post('/', rentalListingController.createRentalListing);
 router.get('/', rentalListingController.getRentalListings);
 router.get('/:id', rentalListingController.getRentalListingById);
 router.put('/:id', authMiddleware, rentalListingController.updateRentalListing);

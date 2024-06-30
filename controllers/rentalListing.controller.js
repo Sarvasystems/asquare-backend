@@ -12,8 +12,20 @@ exports.createRentalListing = async (req, res) => {
 
 exports.getRentalListings = async (req, res) => {
   try {
-    const rentalListings = await RentalListing.find();
-    res.status(200).json(rentalListings);
+    const { page = 1} = req.query;
+    const limit = 2;
+    const rentalListings = await RentalListing.find()
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    const totalItems = await RentalListing.countDocuments();
+
+    res.status(200).json({
+      totalItems,
+      totalPages: Math.ceil(totalItems / limit),
+      currentPage: parseInt(page),
+      rentalListings
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -52,12 +64,17 @@ exports.deleteRentalListing = async (req, res) => {
 
 exports.searchAndFilterRentalListings = async (req, res) => {
   try {
-    const { title, developer, location, community, minBeds, minBaths, propertyType, minPrice, maxPrice } = req.body;
-    
+    const { 
+      title, developer, location, community, minBeds, minBaths, 
+      propertyType, minPrice, maxPrice, soldType 
+    } = req.body;
+
+    const { page = 1 } = req.query;
+    const limit = 2;
     let filters = {};
 
     if (title) {
-      filters.title = { $regex: title, $options: 'i' }; // Case-insensitive search
+      filters.title = { $regex: title, $options: 'i' }; 
     }
     if (developer) {
       filters['developer.title'] = { $regex: developer, $options: 'i' };
@@ -75,20 +92,33 @@ exports.searchAndFilterRentalListings = async (req, res) => {
       filters.baths = { $gte: Number(minBaths) };
     }
     if (propertyType) {
-      filters.soldType = propertyType;
+      filters.propertyType = propertyType;
+    }
+    if (soldType) {
+      filters.soldType = soldType;
     }
     if (minPrice || maxPrice) {
-      filters['transaction.soldFor.aed'] = {};
+      filters.price = {};
       if (minPrice) {
-        filters['transaction.soldFor.aed'].$gte = Number(minPrice);
+        filters.price.$gte = Number(minPrice);
       }
       if (maxPrice) {
-        filters['transaction.soldFor.aed'].$lte = Number(maxPrice);
+        filters.price.$lte = Number(maxPrice);
       }
     }
 
-    const rentalListings = await RentalListing.find(filters);
-    res.status(200).json(rentalListings);
+    const rentalListings = await RentalListing.find(filters)
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit));
+
+    const totalItems = await RentalListing.countDocuments(filters);
+
+    res.status(200).json({
+      totalItems,
+      totalPages: Math.ceil(totalItems / limit),
+      currentPage: parseInt(page),
+      rentalListings
+    });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -111,7 +141,7 @@ exports.uploadImage = async (req, res) => {
       return res.status(404).json({ error: 'RentalListing not found' });
     }
 
-    rentalListing.displayImages.push(imageUrl); // Add the image URL to displayImages
+    rentalListing.displayImages.push(imageUrl); 
     await rentalListing.save();
 
     res.status(200).json({
